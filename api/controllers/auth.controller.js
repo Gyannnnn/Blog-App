@@ -3,28 +3,19 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 
 export const signup = async (req, res, next) => {
-  const { username, email, passward } = req.body;
-  if (
-    !username ||
-    !email ||
-    !passward ||
-    username === "" ||
-    email === "" ||
-    passward === ""
-  ) {
-    next(errorHandler(400,'all field are required'));
+  const { username, email, password } = req.body; 
+  if (!username || !email || !password || username === "" || email === "" || password === "") {
+    return next(errorHandler(400, 'All fields are required'));
   }
-  const hashpassward = bcryptjs.hashSync(passward, 10);
+  const hashPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
     username,
     email,
-    passward: hashpassward,
+    password: hashPassword, 
   });
   try {
     await newUser.save();
-    res
-      .status(201)
-      .json({ message: "User signed up successfully!", user: req.body });
+    res.status(201).json({ message: "User signed up successfully!", user: req.body });
   } catch (err) {
     next(err);
   }
