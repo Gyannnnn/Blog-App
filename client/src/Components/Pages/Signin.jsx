@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from "flowbite-react";
+import { useDispatch,useSelector } from "react-redux";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../../Redux/User/userSlice";
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
+  const {loading, error:errorMessage} = useSelector(state => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -12,7 +20,12 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!formData.email || !formData.password){
+      return dispatch(signInFailure("Please Fill All The Feilds"))
+
+    }
     try {
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,15 +36,17 @@ const Signin = () => {
       console.log(data);
 
       if (data.message === "Signin successful") {
+        dispatch(signInSuccess(data))
         navigate("/");
       }
     } catch (error) {
+      dispatch(signInFailure(data.message))
       console.log(error);
     }
   };
 
   return (
-    <div className="min-h-screen mt-20">
+    <div className="min-h-screen mt-36">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:items-center md:flex-row gap-10">
         <div className="flex-1">
           <Link to="/" className="text-3xl dark:text-white font-semibold">
