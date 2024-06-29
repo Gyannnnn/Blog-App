@@ -4,9 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { BsMoonStars } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toggleTheme } from "../../Redux/Theme/ThemeSlice";
 
 const Header = () => {
   const path = useLocation().pathname;
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   return (
     <Navbar className="border-b-2 ">
@@ -31,7 +34,7 @@ const Header = () => {
         <IoSearch />
       </Button>
       <div className="flex gap-2 sm:order-2">
-        <Button className="w-10 h-10" pill color="gray">
+        <Button className="w-10 h-10" pill color="gray" onClick={()=>dispatch(toggleTheme())}>
           <BsMoonStars />
         </Button>
         {currentUser ? (
@@ -46,18 +49,18 @@ const Header = () => {
               />
             }
           >
-          <Dropdown.Header>
-            <div className="flex flex-col">
-            <span className="text-sm">{currentUser.username}</span>
-            <span className="font-bold">@{currentUser.email}</span>
-            </div>
-          </Dropdown.Header>
-          <Link to="/dashboard?tab=profile">
-            <Dropdown.Item>Profile</Dropdown.Item>
-          </Link>
-            <Dropdown.Divider/>
+            <Dropdown.Header>
+              <div className="flex flex-col">
+                <span className="text-sm">{currentUser.username}</span>
+                <span className="font-bold">@{currentUser.email}</span>
+              </div>
+            </Dropdown.Header>
+            <Link to="/dashboard?tab=profile">
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
             <Link>
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+              <Dropdown.Item>Sign Out</Dropdown.Item>
             </Link>
           </Dropdown>
         ) : (
