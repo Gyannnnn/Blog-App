@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Label, TextInput } from "flowbite-react";
 import Oauth from "./Oauth";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
+  const navigate = useNavigate()
   
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -20,6 +22,10 @@ const Signup = () => {
       });
       const data = await res.json();
       console.log(data); 
+      if(res.ok){
+        alert("Signed Up Successfull");
+        navigate("/sign-in");
+      }
     } catch (error) {
       console.error(error); 
     }
