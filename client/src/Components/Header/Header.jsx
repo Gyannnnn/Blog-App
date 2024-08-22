@@ -43,7 +43,7 @@ const Header = () => {
             inline
             label={
               <Avatar
-                alt="User avtar"
+                alt="User Profile"
                 img={currentUser.profilePicture}
                 rounded
               />
